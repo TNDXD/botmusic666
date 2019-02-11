@@ -15,7 +15,7 @@ client.on('ready', function() {
 	//client.user.setGame('Locklear est', 'https://www.twitch.tv/locklear')
 })
 
-client.login(TOKEN)
+client.login(process.env.TOKEN)
 
 client.on('message', message => {
 	if(message.content === PREFIX + "help") {
