@@ -1,6 +1,8 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
-const { TOKEN, PREFIX, GOOGLE_API_KEY } = require('./config.json')
+const TOKEN = process.ENV.TOKEN
+const PREFIX = "²"
+const GOOGLE_API_KEY = process.ENV.API
 const ytdl = require('ytdl-core')
 const YouTube = require('simple-youtube-api')
 
@@ -15,7 +17,7 @@ client.on('ready', function() {
 	//client.user.setGame('Locklear est', 'https://www.twitch.tv/locklear')
 })
 
-client.login(process.env.TOKEN)
+client.login(TOKEN)
 
 client.on('message', message => {
 	if(message.content === PREFIX + "help") {
