@@ -14,26 +14,73 @@ client.on('ready', function() {
     console.log('Connecté !')
     client.user.setActivity('de la musique !', { type : 'LISTENING' })
 	client.user.setUsername('Bot-Music [FR]')
-	//client.user.setGame('Locklear est', 'https://www.twitch.tv/locklear')
 })
 
 client.login(TOKEN)
 
 client.on('message', message => {
+	const say = message.content.slice('     '.length)
+	if(message.content.startsWith(PREFIX + 'dit')) {
+		message.delete()
+		message.channel.send(say)
+	}
+})
+
+client.on('message', message => {
+	const sugg = message.content.slice(`²sugg `.length)
+	const auteur = message.author.username
+	if(message.content.startsWith(PREFIX + "sugg")) {
+		//const salon = message.member.guild.channels.get('547884670537433088')
+		const logs = message.member.guild.channels.get('534427667160891402')
+		message.delete()
+		var sugges = new Discord.RichEmbed()
+		.setTitle('**Nouvelle suggestion**')
+		.setColor('#ff0000')
+		.addField('Suggestion de ' + auteur + ' :', `${sugg}`)
+		message.channel.send(sugges).then(function (message) {
+		message.react("👍")
+		message.react("👎")
+		// client.on('messageReactionAdd', (reaction, user) => {
+		// 	if(reaction.emoji.name === "👍" && user.id !== client.user.id) {
+		// 		logs.send(' reaction positive')
+		// 	}
+		// 	if(reaction.emoji.name === "👎" && user.id !== client.user.id) {
+		// 		logs.send(' reaction négative')
+		// 	}
+		// })
+	})
+	}
+})
+
+client.on('message', message => {
 	if(message.content === PREFIX + "help") {
 		var embed = new Discord.RichEmbed()
-			.setTitle('**Commande help**')
+			.setTitle('**Commandes**')
 			.setColor('#ff0000')
 			.addField(`${PREFIX}suppr`, '*Supprime 50 messages dans le salon où est utiliser la commande*')
+			.addField(`${PREFIX}dit`, '*Répète ce qui est écrit après la commande*')
+			.addField(`${PREFIX}sugg`, '*Commande de suggestion/boite à idées*')
+			.addField(`${PREFIX}helpmp`, 'Vous envoie la liste des commande en mp')
+		var music = new Discord.RichEmbed()
+			.setTitle('**Commandes musiques**')
+			.setColor('#ff0000')
+			.setDescription("Pour l'intant, l'affichage du titre ne fonctionne pas !")
 			.addField(`${PREFIX}play`,'*Lance la musique*')
 			.addField(`${PREFIX}stop`,'*Arrete la musique et déconnecte le bot du vocal*')
-			.addField(`${PREFIX}volmume`,'*Choisis le volume du bot* (De base : 5)')
+			.addField(`${PREFIX}volume`,'*Choisis le volume du bot* (De base : 5)')
 			.addField(`${PREFIX}skip`,'*Passe à la musique suivante*')
 			.addField(`${PREFIX}np`,'*Sort le nom de la musique en cours de lecture*')
 			.addField(`${PREFIX}queue`,'*Sort la playlist*')
 			.addField(`${PREFIX}pause`,'*Fait pause a la lecture*')
 			.addField(`${PREFIX}resume`,'*Relance la musique*')
-			return message.channel.send(embed)
+			message.channel.send(embed)
+			message.channel.send(music)
+	}
+})
+
+client.on('message', message => {
+	if(message.content === PREFIX + 'helpmp') {
+		message.author.send('²help')
 	}
 })
 
@@ -188,7 +235,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
 	console.log(video);
 	const song = {
 		id: video.id,
-		//title: Util.escapeMarkdown(video.title),
+		title: Util.escapeMarkdown(video.title),
 		url: `https://www.youtube.com/watch?v=${video.id}`
 	};
 	if (!serverQueue) {
