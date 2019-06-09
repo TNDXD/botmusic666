@@ -21,7 +21,7 @@ client.login(TOKEN)
 
 client.on('message', message => {
 	const say = message.content.slice('     '.length)
-	if(message.content.startsWith(PREFIX + 'dit')) {
+	if(message.content.startsWith(PREFIX - 'dit')) {
 		message.delete()
 		message.channel.send(say)
 	}
